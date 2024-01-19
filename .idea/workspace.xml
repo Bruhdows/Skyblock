@@ -4,7 +4,87 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34be019e-8168-42c4-92f7-8715cfed552a" name="Changes" comment="Initial commit" />
+    <list default="true" id="34be019e-8168-42c4-92f7-8715cfed552a" name="Changes" comment="Initial commit">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/Skyblock-1.0-shaded.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/Skyblock-1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/SkyblockPlugin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/command/ItemCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/ClickableItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/InventoryListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/InventoryManager$InvListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/InventoryManager$InvTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/InventoryManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/SmartInventory$Builder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/SmartInventory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/InventoryContents$Impl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/InventoryContents.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/InventoryProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/Pagination$Impl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/Pagination.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/SlotIterator$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/SlotIterator$Impl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/SlotIterator$Type.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/SlotIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/content/SlotPos.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/opener/ChestInventoryOpener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/opener/InventoryOpener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/gui/api/opener/SpecialInventoryOpener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/handler/AbilityHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/handler/InvalidUsageHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/handler/MissingPermissionsHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/listener/ItemListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/listener/JoinQuitListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/manager/AbilityManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/manager/ItemManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/manager/JedisManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/manager/UserManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/Ability.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/AbilityCost.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/AbilityCostType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/AbilityCostValueType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/AbilityTriggerType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/impl/LeftClickAbility.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/impl/LeftShiftClickAbility.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/ability/impl/RightClickAbility.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/item/Item.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/item/ItemType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/item/Rarity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/item/StatType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/user/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/user/UserData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/module/user/UserInventory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/config/Configuration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/config/Data.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/config/Messages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/config/section/DatabaseSection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/config/section/MongoDBSection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/config/section/RedisSection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/database/JedisAPI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/database/JedisListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/storage/database/MongoDB.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/task/UserUpdateTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/util/ColorUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/util/SerializationUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/util/TextUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/util/item/ItemBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/me/bruhdows/skyblock/util/item/ItemManipulator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-Skyblock-1.0.jar" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,16 +115,16 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Olivier/Desktop/Skyblock/src/main/java/me/bruhdows/skyblock/task&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/Olivier/Desktop/Skyblockcopy",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="me.bruhdows.skyblock.module.ability" />
@@ -154,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705672286022</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Initial commit">
+      <option name="closed" value="true" />
+      <created>1705672857736</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705672857736</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

@@ -47,8 +47,6 @@ out/
 .settings/
 tmp/
 .metadata
-.classpath
-.project
 *.tmp
 *.bak
 *.swp

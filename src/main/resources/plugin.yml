@@ -1,0 +1,4 @@
+name: Skyblock
+version: '${project.version}'
+main: me.bruhdows.skyblock.SkyblockPlugin
+api-version: '1.18'

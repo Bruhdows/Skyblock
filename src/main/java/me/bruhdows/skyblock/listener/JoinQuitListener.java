@@ -36,9 +36,9 @@ public record JoinQuitListener(SkyblockPlugin plugin) implements Listener {
         e.quitMessage(null);
 
         Player player = e.getPlayer();
-        User user = this.instance.getUserManager().getUser(player);
+        User user = this.plugin.getUserManager().getUser(player);
         if (user == null) return;
-        user.setLastServerId(instance.getData().getServerId());
+        user.setLastServerId(plugin.getData().getServerId());
         user.updateData(player);
     }
 }

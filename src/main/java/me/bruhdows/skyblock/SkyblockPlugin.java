@@ -20,6 +20,8 @@ import me.bruhdows.skyblock.gui.api.InventoryManager;
 import me.bruhdows.skyblock.listener.DamageListener;
 import me.bruhdows.skyblock.listener.JoinQuitListener;
 import me.bruhdows.skyblock.manager.*;
+import me.bruhdows.skyblock.module.item.impl.EnchantedDiamond;
+import me.bruhdows.skyblock.module.item.impl.Enrager;
 import me.bruhdows.skyblock.module.mob.impl.Dummy;
 import me.bruhdows.skyblock.module.user.User;
 import me.bruhdows.skyblock.storage.config.Configuration;
@@ -141,23 +143,15 @@ public final class SkyblockPlugin extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
 
+        inventoryManager = new InventoryManager(this);
+
         userManager = new UserManager(this);
         userManager.loadUsers();
 
-        inventoryManager = new InventoryManager(this);
 
         itemManager = new ItemManager();
-        itemManager.registerItem(
-                new Item("ENRAGER",
-                        ItemBuilder.of(new ItemStack(Material.IRON_AXE)).name("Enrager").get(),
-                        ItemType.AXE,
-                        new EnumMap<>(Map.of(
-                                StatType.STRENGTH, 1,
-                                StatType.DEFENSE, 2,
-                                StatType.HEALTH, 5,
-                                StatType.DAMAGE, 10)),
-                        List.of("LEFT_CLICK_ABILITY", "LEFT_SHIFT_CLICK_ABILITY", "RIGHT_CLICK_ABILITY"),
-                        Rarity.EPIC));
+        itemManager.registerItem(new Enrager());
+        itemManager.registerItem(new EnchantedDiamond());
 
         mobManager = new MobManager();
         mobManager.registerMob(new Dummy());

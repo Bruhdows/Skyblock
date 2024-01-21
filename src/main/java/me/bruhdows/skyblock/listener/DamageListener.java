@@ -9,7 +9,9 @@ import me.bruhdows.skyblock.SkyblockPlugin;
 import me.bruhdows.skyblock.module.item.Item;
 import me.bruhdows.skyblock.module.item.StatType;
 import me.bruhdows.skyblock.module.mob.Mob;
+import me.bruhdows.skyblock.util.RandomUtil;
 import me.bruhdows.skyblock.util.TextUtil;
+import org.apache.commons.lang3.RandomUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -41,19 +43,25 @@ public record DamageListener(SkyblockPlugin plugin) implements Listener {
 
         e.setDamage(0);
 
-        String name = living.getUniqueId() + "_" + UUID.randomUUID();
         int damage = calculateDamage(player);
 
-        Hologram holo = DHAPI.createHologram(name, living.getLocation(), List.of(""));
 
+        String name = living.getUniqueId() + "_" + UUID.randomUUID();
+
+        double randomX = RandomUtil.randomDouble(-0.8, 0.8);
+        double randomZ = RandomUtil.randomDouble(-0.8, 0.8);
+
+        Hologram hologram = DHAPI.createHologram(name, living.getLocation().add(randomX, 1.5, randomZ), List.of("&c" + damage + "&4⚔"));
+        hologram.setDefaultVisibleState(false);
+        hologram.setShowPlayer(player);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             DHAPI.removeHologram(name);
         }, 20L);
 
-
         if (damage >= living.getHealth()) {
             SkyblockPlugin.getInstance().getMobManager().removeMob(living.getUniqueId());
+            mob.death(player, living);
             living.remove();
             return;
         }

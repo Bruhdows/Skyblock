@@ -3,6 +3,9 @@ package me.bruhdows.skyblock.module.ability;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import me.bruhdows.skyblock.SkyblockPlugin;
+import me.bruhdows.skyblock.manager.CooldownManager;
+import me.bruhdows.skyblock.module.item.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
@@ -22,8 +25,6 @@ public abstract class Ability {
     private final Set<AbilityCost> abilityCosts;
     private final AbilityTriggerType triggerType;
 
-    private long lastUse;
-
     private AbilityTriggerType getTriggerType(Player player, Action action) {
         if (action.isLeftClick()) {
             if (player.isSneaking()) return AbilityTriggerType.LEFT_CLICK_SHIFT;
@@ -35,9 +36,9 @@ public abstract class Ability {
         return null;
     }
 
-    public void use(Player player, Action action) {
+    public void use(Player player, Item item, Action action) {
         if (getTriggerType(player, action) != triggerType) return;
-        setLastUse(System.currentTimeMillis());
+
         onUse(player);
     }
 

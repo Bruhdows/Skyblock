@@ -37,16 +37,21 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <relocations>
+                                <relocation>
+                                    <pattern>de.tr7zw.changeme.nbtapi</pattern>
+                                    <shadedPattern>me.bruhdows.skyblock.lib.nbtapi</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.github.fierioziy.particlenativeapi</pattern>
+                                    <shadedPattern>me.bruhdows.skyblock.lib.particleapi</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>me.bruhdows.skyblock.libs.nbtapi</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -79,6 +84,10 @@
             <id>okaeri-repo</id>
             <url>https://storehouse.okaeri.eu/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -97,6 +106,12 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api-plugin</artifactId>
             <version>2.12.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fierioziy.particlenativeapi</groupId>
+            <artifactId>ParticleNativeAPI-core</artifactId>
+            <version>4.1.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dev.rollczi</groupId>
@@ -122,6 +137,12 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>5.0.0-beta0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.decentsoftware-eu</groupId>
+            <artifactId>decentholograms</artifactId>
+            <version>2.8.6</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

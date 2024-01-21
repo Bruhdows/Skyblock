@@ -3,13 +3,13 @@ package me.bruhdows.skyblock.listener;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadableItemNBT;
 import me.bruhdows.skyblock.SkyblockPlugin;
+import me.bruhdows.skyblock.module.ability.Ability;
 import me.bruhdows.skyblock.module.item.Item;
 import me.bruhdows.skyblock.module.item.ItemType;
 import me.bruhdows.skyblock.module.item.Rarity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,6 +35,10 @@ public record ItemListener(SkyblockPlugin plugin) implements Listener {
         if (item == null) return;
         if (!item.matches(is)) player.getInventory().setItem(e.getHand(), item.getItem());
 
-        item.getAbilities().forEach(ability -> ability.use(player, e.getAction()));
+        item.getAbilities().forEach(a -> {
+            Ability ability = plugin.getAbilityManager().getAbility(a);
+            if (ability == null) return;
+            ability.use(player, item, e.getAction());
+        });
     }
 }

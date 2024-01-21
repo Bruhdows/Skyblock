@@ -12,7 +12,7 @@ public class AbilityManager {
 
     public void registerAbility(Ability ability) {
         if(abilities.containsValue(ability)) {
-            TextUtil.warn("Duplicate item found! Skipping. (" + ability.getId() + ")");
+            TextUtil.warn("Duplicate ability found! Skipping. (" + ability.getId() + ")");
             return;
         }
 

@@ -1,18 +1,26 @@
 package me.bruhdows.skyblock;
 
+import com.github.fierioziy.particlenativeapi.api.ParticleNativeAPI;
+import com.github.fierioziy.particlenativeapi.api.utils.ParticleException;
+import com.github.fierioziy.particlenativeapi.core.ParticleNativeCore;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.annotations.join.Join;
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
+import eu.decentsoftware.holograms.api.DHAPI;
+import eu.decentsoftware.holograms.api.DecentHolograms;
+import eu.decentsoftware.holograms.api.DecentHologramsAPI;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import lombok.Getter;
 import me.bruhdows.skyblock.command.ItemCommand;
+import me.bruhdows.skyblock.command.MobCommand;
 import me.bruhdows.skyblock.gui.api.InventoryManager;
+import me.bruhdows.skyblock.listener.DamageListener;
 import me.bruhdows.skyblock.listener.JoinQuitListener;
-import me.bruhdows.skyblock.manager.JedisManager;
-import me.bruhdows.skyblock.manager.UserManager;
+import me.bruhdows.skyblock.manager.*;
+import me.bruhdows.skyblock.module.mob.impl.Dummy;
 import me.bruhdows.skyblock.module.user.User;
 import me.bruhdows.skyblock.storage.config.Configuration;
 import me.bruhdows.skyblock.storage.config.Data;
@@ -20,7 +28,6 @@ import me.bruhdows.skyblock.storage.config.Messages;
 import me.bruhdows.skyblock.handler.InvalidUsageHandler;
 import me.bruhdows.skyblock.handler.MissingPermissionsHandler;
 import me.bruhdows.skyblock.listener.ItemListener;
-import me.bruhdows.skyblock.manager.ItemManager;
 import me.bruhdows.skyblock.module.ability.impl.LeftClickAbility;
 import me.bruhdows.skyblock.module.ability.impl.LeftShiftClickAbility;
 import me.bruhdows.skyblock.module.item.ItemType;
@@ -52,6 +59,8 @@ public final class SkyblockPlugin extends JavaPlugin {
     private static SkyblockPlugin instance;
 
     private ItemManager itemManager;
+    private MobManager mobManager;
+    private AbilityManager abilityManager;
     private UserManager userManager;
     private InventoryManager inventoryManager;
     private LiteCommands<CommandSender> liteCommands;
@@ -62,6 +71,8 @@ public final class SkyblockPlugin extends JavaPlugin {
 
     private JedisAPI jedisAPI;
     private MongoDB mongoDB;
+
+    private ParticleNativeAPI particleAPI;
 
     @Override
     public void onEnable() {
@@ -124,6 +135,12 @@ public final class SkyblockPlugin extends JavaPlugin {
     }
 
     private void registerManagers() {
+        try {
+            particleAPI = ParticleNativeCore.loadAPI(this);
+        } catch (ParticleException e) {
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
         userManager = new UserManager(this);
         userManager.loadUsers();
 
@@ -138,15 +155,24 @@ public final class SkyblockPlugin extends JavaPlugin {
                                 StatType.STRENGTH, 1,
                                 StatType.DEFENSE, 2,
                                 StatType.HEALTH, 5,
-                                StatType.DAMAGE, 200)),
-                        List.of(new LeftClickAbility(), new LeftShiftClickAbility(), new RightClickAbility()),
+                                StatType.DAMAGE, 10)),
+                        List.of("LEFT_CLICK_ABILITY", "LEFT_SHIFT_CLICK_ABILITY", "RIGHT_CLICK_ABILITY"),
                         Rarity.EPIC));
+
+        mobManager = new MobManager();
+        mobManager.registerMob(new Dummy());
+
+        abilityManager = new AbilityManager();
+        abilityManager.registerAbility(new LeftClickAbility());
+        abilityManager.registerAbility(new LeftShiftClickAbility());
+        abilityManager.registerAbility(new RightClickAbility());
     }
 
     private void registerListeners() {
         Set.of(
                 new ItemListener(this),
-                new JoinQuitListener(this)
+                new JoinQuitListener(this),
+                new DamageListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
@@ -154,7 +180,8 @@ public final class SkyblockPlugin extends JavaPlugin {
         liteCommands = LiteCommandsBukkit.builder()
                 .settings(settings -> settings.fallbackPrefix("skyblock").nativePermissions(true))
                 .commands(
-                    new ItemCommand()
+                    new ItemCommand(),
+                    new MobCommand()
                 )
                 .message(LiteBukkitMessages.PLAYER_ONLY, "&cOnly player can execute this command!")
                 .message(LiteBukkitMessages.PLAYER_NOT_FOUND, input -> "&cPlayer &7" + input + " &cnot found!")

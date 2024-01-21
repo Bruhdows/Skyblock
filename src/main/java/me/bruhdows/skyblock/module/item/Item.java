@@ -4,8 +4,8 @@ import de.tr7zw.nbtapi.NBT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import me.bruhdows.skyblock.SkyblockPlugin;
 import me.bruhdows.skyblock.module.ability.Ability;
-import me.bruhdows.skyblock.module.ability.AbilityCostType;
 import me.bruhdows.skyblock.module.ability.AbilityCostValueType;
 import me.bruhdows.skyblock.util.ColorUtil;
 import me.bruhdows.skyblock.util.item.ItemBuilder;
@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -26,7 +25,7 @@ public class Item {
     private ItemStack itemStack;
     private ItemType type;
     private EnumMap<StatType, Integer> stats;
-    private List<Ability> abilities;
+    private List<String> abilities;
     private Rarity rarity;
 
     public ItemStack getItem() {
@@ -39,7 +38,8 @@ public class Item {
         ItemBuilder itemBuilder = ItemBuilder.of(is);
         itemBuilder.flag(ItemFlag.HIDE_ATTRIBUTES);
 
-        if (is.hasItemMeta() && !is.getItemMeta().getDisplayName().contains("§")) itemBuilder.name(ColorUtil.getColorHex(rarity.color) + (is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(is.getType().name().replace("_", " "))));
+        if (is.hasItemMeta() && !is.getItemMeta().getDisplayName().contains("§"))
+            itemBuilder.name(ColorUtil.getColorHex(rarity.color) + (is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : WordUtils.capitalizeFully(is.getType().name().replace("_", " "))));
 
 
         if (stats != null) {
@@ -50,7 +50,9 @@ public class Item {
         }
 
         if (abilities != null) {
-            abilities.forEach(ability -> {
+            abilities.forEach(a -> {
+                Ability ability = SkyblockPlugin.getInstance().getAbilityManager().getAbility(a);
+                if (ability == null) return;
                 itemBuilder.appendLore("&6Ability: " + ability.getName() + " " + ColorUtil.getColorHex(ability.getTriggerType().color) + "&l" + ability.getTriggerType().name);
                 if (ability.getDescription() != null) itemBuilder.appendLore(ability.getDescription());
                 if (ability.getAbilityCosts() != null) ability.getAbilityCosts().forEach(abilityCost -> {

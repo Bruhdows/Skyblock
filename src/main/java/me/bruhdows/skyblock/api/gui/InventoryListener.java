@@ -1,4 +1,4 @@
-package me.bruhdows.skyblock.gui.api;
+package me.bruhdows.skyblock.api.gui;
 
 import lombok.Getter;
 

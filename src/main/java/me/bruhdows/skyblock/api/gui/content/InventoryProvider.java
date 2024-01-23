@@ -1,4 +1,4 @@
-package me.bruhdows.skyblock.gui.api.content;
+package me.bruhdows.skyblock.api.gui.content;
 
 import org.bukkit.entity.Player;
 

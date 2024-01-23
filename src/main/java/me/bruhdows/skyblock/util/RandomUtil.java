@@ -1,7 +1,6 @@
 package me.bruhdows.skyblock.util;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomUtil {
 
@@ -11,6 +10,11 @@ public class RandomUtil {
 
     public static double randomDouble(double min, double max) {
         return min + new Random().nextDouble() * (max - min);
+    }
+
+    public static boolean chanceOf(double chance) {
+        double random = RandomUtil.randomDouble(0, 100);
+        return random < chance;
     }
 
 }

@@ -1,9 +1,9 @@
-package me.bruhdows.skyblock.gui.api;
+package me.bruhdows.skyblock.api.gui;
 
-import me.bruhdows.skyblock.gui.api.content.InventoryContents;
-import me.bruhdows.skyblock.gui.api.opener.ChestInventoryOpener;
-import me.bruhdows.skyblock.gui.api.opener.InventoryOpener;
-import me.bruhdows.skyblock.gui.api.opener.SpecialInventoryOpener;
+import me.bruhdows.skyblock.api.gui.content.InventoryContents;
+import me.bruhdows.skyblock.api.gui.opener.ChestInventoryOpener;
+import me.bruhdows.skyblock.api.gui.opener.InventoryOpener;
+import me.bruhdows.skyblock.api.gui.opener.SpecialInventoryOpener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

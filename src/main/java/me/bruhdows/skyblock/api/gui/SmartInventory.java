@@ -1,11 +1,11 @@
-package me.bruhdows.skyblock.gui.api;
+package me.bruhdows.skyblock.api.gui;
 
 
 import lombok.Getter;
 import me.bruhdows.skyblock.SkyblockPlugin;
-import me.bruhdows.skyblock.gui.api.content.InventoryContents;
-import me.bruhdows.skyblock.gui.api.content.InventoryProvider;
-import me.bruhdows.skyblock.gui.api.opener.InventoryOpener;
+import me.bruhdows.skyblock.api.gui.content.InventoryContents;
+import me.bruhdows.skyblock.api.gui.content.InventoryProvider;
+import me.bruhdows.skyblock.api.gui.opener.InventoryOpener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryCloseEvent;

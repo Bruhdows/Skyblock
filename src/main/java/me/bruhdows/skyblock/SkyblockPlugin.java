@@ -4,22 +4,24 @@ import com.github.fierioziy.particlenativeapi.api.ParticleNativeAPI;
 import com.github.fierioziy.particlenativeapi.api.utils.ParticleException;
 import com.github.fierioziy.particlenativeapi.core.ParticleNativeCore;
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.annotations.join.Join;
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
-import eu.decentsoftware.holograms.api.DHAPI;
-import eu.decentsoftware.holograms.api.DecentHolograms;
-import eu.decentsoftware.holograms.api.DecentHologramsAPI;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import lombok.Getter;
+import me.bruhdows.skyblock.api.gui.InventoryManager;
 import me.bruhdows.skyblock.command.ItemCommand;
 import me.bruhdows.skyblock.command.MobCommand;
-import me.bruhdows.skyblock.gui.api.InventoryManager;
+import me.bruhdows.skyblock.handler.InvalidUsageHandler;
+import me.bruhdows.skyblock.handler.MissingPermissionsHandler;
 import me.bruhdows.skyblock.listener.DamageListener;
+import me.bruhdows.skyblock.listener.ItemListener;
 import me.bruhdows.skyblock.listener.JoinQuitListener;
 import me.bruhdows.skyblock.manager.*;
+import me.bruhdows.skyblock.module.ability.impl.LeftClickAbility;
+import me.bruhdows.skyblock.module.ability.impl.LeftShiftClickAbility;
+import me.bruhdows.skyblock.module.ability.impl.RightClickAbility;
 import me.bruhdows.skyblock.module.item.impl.EnchantedDiamond;
 import me.bruhdows.skyblock.module.item.impl.Enrager;
 import me.bruhdows.skyblock.module.mob.impl.Dummy;
@@ -27,31 +29,16 @@ import me.bruhdows.skyblock.module.user.User;
 import me.bruhdows.skyblock.storage.config.Configuration;
 import me.bruhdows.skyblock.storage.config.Data;
 import me.bruhdows.skyblock.storage.config.Messages;
-import me.bruhdows.skyblock.handler.InvalidUsageHandler;
-import me.bruhdows.skyblock.handler.MissingPermissionsHandler;
-import me.bruhdows.skyblock.listener.ItemListener;
-import me.bruhdows.skyblock.module.ability.impl.LeftClickAbility;
-import me.bruhdows.skyblock.module.ability.impl.LeftShiftClickAbility;
-import me.bruhdows.skyblock.module.item.ItemType;
-import me.bruhdows.skyblock.module.item.Item;
-import me.bruhdows.skyblock.module.item.Rarity;
-import me.bruhdows.skyblock.module.item.StatType;
-import me.bruhdows.skyblock.module.ability.impl.RightClickAbility;
 import me.bruhdows.skyblock.storage.database.JedisAPI;
 import me.bruhdows.skyblock.storage.database.JedisListener;
 import me.bruhdows.skyblock.storage.database.MongoDB;
 import me.bruhdows.skyblock.task.UserUpdateTask;
-import me.bruhdows.skyblock.util.item.ItemBuilder;
+import me.bruhdows.skyblock.util.TextUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -140,6 +127,7 @@ public final class SkyblockPlugin extends JavaPlugin {
         try {
             particleAPI = ParticleNativeCore.loadAPI(this);
         } catch (ParticleException e) {
+            TextUtil.severe("ParticleAPI not found.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
 

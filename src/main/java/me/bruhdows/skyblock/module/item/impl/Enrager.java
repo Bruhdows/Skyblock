@@ -19,11 +19,12 @@ public class Enrager extends Item {
                 ItemType.AXE,
                 new EnumMap<>(Map.of(
                         StatType.DAMAGE, 200,
-                        StatType.STRENGTH, 300
+                        StatType.STRENGTH, 300,
+                        StatType.CRIT_CHANCE, 50,
+                        StatType.CRIT_DAMAGE, 100
                 )),
                 List.of("LEFT_CLICK_ABILITY"),
                 Rarity.EPIC
         );
     }
-
 }

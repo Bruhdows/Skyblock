@@ -1,9 +1,9 @@
-package me.bruhdows.skyblock.gui.api.opener;
+package me.bruhdows.skyblock.api.gui.opener;
 
 
 import com.google.common.base.Preconditions;
-import me.bruhdows.skyblock.gui.api.InventoryManager;
-import me.bruhdows.skyblock.gui.api.SmartInventory;
+import me.bruhdows.skyblock.api.gui.InventoryManager;
+import me.bruhdows.skyblock.api.gui.SmartInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

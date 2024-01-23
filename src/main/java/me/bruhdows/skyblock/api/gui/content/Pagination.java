@@ -1,6 +1,6 @@
-package me.bruhdows.skyblock.gui.api.content;
+package me.bruhdows.skyblock.api.gui.content;
 
-import me.bruhdows.skyblock.gui.api.ClickableItem;
+import me.bruhdows.skyblock.api.gui.ClickableItem;
 
 import java.util.Arrays;
 

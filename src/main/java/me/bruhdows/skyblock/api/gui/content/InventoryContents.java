@@ -1,8 +1,8 @@
-package me.bruhdows.skyblock.gui.api.content;
+package me.bruhdows.skyblock.api.gui.content;
 
 
-import me.bruhdows.skyblock.gui.api.ClickableItem;
-import me.bruhdows.skyblock.gui.api.SmartInventory;
+import me.bruhdows.skyblock.api.gui.ClickableItem;
+import me.bruhdows.skyblock.api.gui.SmartInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

@@ -32,8 +32,10 @@ import me.bruhdows.skyblock.storage.config.Messages;
 import me.bruhdows.skyblock.storage.database.JedisAPI;
 import me.bruhdows.skyblock.storage.database.JedisListener;
 import me.bruhdows.skyblock.storage.database.MongoDB;
+import me.bruhdows.skyblock.task.StatsTask;
 import me.bruhdows.skyblock.task.UserUpdateTask;
 import me.bruhdows.skyblock.util.TextUtil;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,6 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.Set;
 
+@SuppressWarnings("UnstableApiUsage")
 @Getter
 public final class SkyblockPlugin extends JavaPlugin {
 
@@ -62,6 +65,7 @@ public final class SkyblockPlugin extends JavaPlugin {
     private MongoDB mongoDB;
 
     private ParticleNativeAPI particleAPI;
+    private MiniMessage miniMessage;
 
     @Override
     public void onEnable() {
@@ -85,8 +89,8 @@ public final class SkyblockPlugin extends JavaPlugin {
             }
         });
         userManager.saveUsers();
-        mongoDB.disconnect();
         jedisAPI.disconnect();
+        mongoDB.disconnect();
     }
 
     private void initConfigs() {
@@ -124,6 +128,8 @@ public final class SkyblockPlugin extends JavaPlugin {
     }
 
     private void registerManagers() {
+        miniMessage = MiniMessage.miniMessage();
+
         try {
             particleAPI = ParticleNativeCore.loadAPI(this);
         } catch (ParticleException e) {
@@ -132,10 +138,12 @@ public final class SkyblockPlugin extends JavaPlugin {
         }
 
         inventoryManager = new InventoryManager(this);
+        inventoryManager.init();
 
-        userManager = new UserManager(this);
-        userManager.loadUsers();
-
+        if (mongoDB != null || jedisAPI != null) {
+            userManager = new UserManager(this);
+            userManager.loadUsers();
+        }
 
         itemManager = new ItemManager();
         itemManager.registerItem(new Enrager());
@@ -167,12 +175,15 @@ public final class SkyblockPlugin extends JavaPlugin {
                 )
                 .message(LiteBukkitMessages.PLAYER_ONLY, "&cOnly player can execute this command!")
                 .message(LiteBukkitMessages.PLAYER_NOT_FOUND, input -> "&cPlayer &7" + input + " &cnot found!")
-                .missingPermission(new MissingPermissionsHandler(this))
-                .invalidUsage(new InvalidUsageHandler(this))
+                .missingPermission(new MissingPermissionsHandler())
+                .invalidUsage(new InvalidUsageHandler())
                 .build();
     }
 
     private void startTasks() {
-        new UserUpdateTask(this).runTaskTimer(this, 0L, 20L);
+        if (mongoDB != null || jedisAPI != null) {
+            new UserUpdateTask(this).runTaskTimer(this, 0L, 20L);
+        }
+        new StatsTask(this).runTaskTimer(this, 0L, 20L);
     }
 }

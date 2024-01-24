@@ -13,7 +13,8 @@ public enum StatType {
     CRIT_CHANCE("Crit Chance", Color.CYAN),
     HEALTH("Health", Color.RED),
     DEFENSE("Defense", Color.GREEN),
-    SPEED("Speed", Color.WHITE);
+    SPEED("Speed", Color.WHITE),
+    MANA("Speed", Color.CYAN);
 
     public final String name;
     public final Color color;

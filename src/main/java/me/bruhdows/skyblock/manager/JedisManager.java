@@ -9,7 +9,6 @@ package me.bruhdows.skyblock.manager;
 import me.bruhdows.skyblock.SkyblockPlugin;
 import me.bruhdows.skyblock.storage.database.JedisAPI;
 import me.bruhdows.skyblock.util.TextUtil;
-import org.bukkit.Bukkit;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
@@ -20,6 +19,7 @@ public class JedisManager {
             if (jedisAPI.getJedis().isBroken() || !jedisAPI.getJedis().isConnected()) jedisAPI.connect();
             jedisAPI.getJedis().publish(channel, message);
         } catch (Exception e) {
+            TextUtil.severe("An error occured during publishing message.");
             TextUtil.severe(e.getMessage());
         }
     }
@@ -31,6 +31,7 @@ public class JedisManager {
             try {
                 subJedis.subscribe(sub, channels);
             } catch (Exception e) {
+                TextUtil.severe("An error occured during subscribing to Redis channels.");
                 TextUtil.severe(e.getMessage());
             }
         });

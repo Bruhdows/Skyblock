@@ -5,7 +5,9 @@ import com.mongodb.client.model.Filters;
 import lombok.Getter;
 import lombok.Setter;
 import me.bruhdows.skyblock.SkyblockPlugin;
+import me.bruhdows.skyblock.module.user.SkillType;
 import me.bruhdows.skyblock.module.user.User;
+import me.bruhdows.skyblock.module.user.UserData;
 import me.bruhdows.skyblock.module.user.UserInventory;
 import me.bruhdows.skyblock.util.SerializationUtil;
 import me.bruhdows.skyblock.util.TextUtil;
@@ -28,17 +30,25 @@ public class UserManager {
     }
 
     public void loadUsers() {
-        this.users = new HashSet<>();
+        users = new HashSet<>();
         plugin.getMongoDB().getCollection("users").find().forEach(document -> {
+            GameMode gameMode = document.getString("gameMode") == null ? null : (GameMode) SerializationUtil.deserializeObject(document.getString("gameMode"));
             String inventory = document.getString("inventory");
+            String skills = document.getString("skills");
+            String data = document.getString("data");
+            Boolean flying = document.getBoolean("flying");
+            if (flying == null) flying = (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR);
             users.add(new User(
                     UUID.fromString(document.getString("uuid")),
                     document.getString("name"),
-                    (GameMode) SerializationUtil.deserializeObject(document.getString("gameMode")),
+                    gameMode,
                     SerializationUtil.deserializeLocation(document.getString("location")),
                     inventory == null ? null : (UserInventory) SerializationUtil.deserializeObject(inventory),
-                    (Map) SerializationUtil.deserializeObject(document.getString("additionalData")),
-                    (boolean[]) SerializationUtil.deserializeObject(document.getString("settings"))));
+                    data == null ? null : (Map<String, UserData>) SerializationUtil.deserializeObject(data),
+                    skills == null ? null : (EnumMap<SkillType, Double>) SerializationUtil.deserializeObject(skills),
+                    flying,
+                    flying
+            ));
         });
     }
 
@@ -61,7 +71,14 @@ public class UserManager {
                 player.getLocation(),
                 new UserInventory(player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getEnderChest().getContents()),
                 new HashMap<>(),
-                new boolean[7]);
+                new EnumMap<>(Map.of(
+                        SkillType.COMBAT, 0.0,
+                        SkillType.MINING, 0.0,
+                        SkillType.FARMING, 0.0,
+                        SkillType.FORAGING, 0.0
+                )),
+                player.isFlying(),
+                player.getAllowFlight());
         plugin.getMongoDB().getCollection("users").insertOne(user.createDocument());
         users.add(user);
         user.sendUpdate(plugin);

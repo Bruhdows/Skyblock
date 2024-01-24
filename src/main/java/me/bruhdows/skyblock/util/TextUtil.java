@@ -2,6 +2,7 @@ package me.bruhdows.skyblock.util;
 
 import me.bruhdows.skyblock.SkyblockPlugin;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -15,6 +16,11 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
 public class TextUtil {
+
+    public static Component miniMessage(String message) {
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.builder().build();
+        return serializer.deserialize(color(message));
+    }
 
     public static String color(String message) {
         Pattern pattern = Pattern.compile("&(#[a-fA-F0-9]{6})");
@@ -30,7 +36,7 @@ public class TextUtil {
     }
 
     public static void sendMessage(Player player, String message) {
-        player.sendMessage(color(message));
+        player.sendMessage(miniMessage(message));
     }
 
     public static void sendMessage(CommandSender sender, String message) {
@@ -54,7 +60,7 @@ public class TextUtil {
     }
 
     public static void sendActionbar(Player player, String message) {
-        player.sendActionBar(Component.text(message));
+        player.sendActionBar(miniMessage(message));
     }
 
     public static void sendTitle(Player player, String title, String subtitle) {

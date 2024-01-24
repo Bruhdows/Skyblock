@@ -1,4 +1,4 @@
-package me.bruhdows.skyblock.module.mob.impl;
+package me.bruhdows.skyblock.module.mob;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

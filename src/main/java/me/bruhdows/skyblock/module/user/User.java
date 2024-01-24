@@ -1,11 +1,11 @@
 package me.bruhdows.skyblock.module.user;
 
-import de.tr7zw.nbtapi.NBTContainer;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import me.bruhdows.skyblock.SkyblockPlugin;
 import me.bruhdows.skyblock.manager.JedisManager;
+import me.bruhdows.skyblock.module.item.Item;
+import me.bruhdows.skyblock.module.item.StatType;
 import me.bruhdows.skyblock.util.SerializationUtil;
 import me.bruhdows.skyblock.util.TextUtil;
 import net.kyori.adventure.text.Component;
@@ -15,10 +15,10 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.checkerframework.checker.units.qual.N;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -30,7 +30,10 @@ public class User implements Serializable {
     private Location location;
     private UserInventory inventory;
     private Map<String, UserData> data;
-    private boolean[] settings;
+    private EnumMap<StatType, Double> stats;
+    private EnumMap<SkillType, Double> skills;
+    private boolean flying;
+    private boolean allowFlight;
 
     private boolean update;
     private String lastServerId;
@@ -41,14 +44,18 @@ public class User implements Serializable {
                 Location location,
                 UserInventory inventory,
                 Map<String, UserData> data,
-                boolean[] settings) {
+                EnumMap<SkillType, Double> skills,
+                boolean flying,
+                boolean allowFlight) {
         this.uuid = uuid;
         this.name = name;
         this.gameMode = gameMode;
         this.location = location;
         this.inventory = inventory;
         this.data = data;
-        this.settings = Arrays.copyOf(settings, 8);
+        this.skills = skills;
+        this.flying = flying;
+        this.allowFlight = allowFlight;
     }
 
     public Document createDocument() {
@@ -58,17 +65,26 @@ public class User implements Serializable {
         document.put("gameMode", SerializationUtil.serializeObject(this.gameMode));
         document.put("location", SerializationUtil.serializeLocation(this.location));
         document.put("inventory", SerializationUtil.serializeObject(this.inventory));
-        HashMap<String, UserData> userDataHashMap = new HashMap<>(this.data);
+        HashMap<String, UserData> userData = new HashMap<>(this.data);
         this.data.forEach((string, data) -> {
-            if (data.isSave()) userDataHashMap.put(string, data);
+            if (data.isSave()) userData.put(string, data);
         });
-        document.put("data", SerializationUtil.serializeObject(userDataHashMap));
-        document.put("settings", SerializationUtil.serializeObject(this.settings));
+        document.put("data", SerializationUtil.serializeObject(userData));
+        document.put("skills", SerializationUtil.serializeObject(this.skills));
+        document.put("flying", this.flying);
+        document.put("allowFlight", this.allowFlight);
         return document;
     }
 
     public void syncPlayer(Player player) {
         try {
+            if (this.stats == null) stats = new EnumMap<>(StatType.class);
+            if (this.skills == null) skills = new EnumMap<>(SkillType.class);
+            if (this.skills.size() != SkillType.values().length) {
+                List<SkillType> values = Arrays.stream(SkillType.values()).collect(Collectors.toList());
+                values = values.stream().filter(skillType -> !skills.containsKey(skillType)).collect(Collectors.toList());
+                values.forEach(value -> skills.put(value, 0.0));
+            }
             if (this.inventory != null) {
                 player.getInventory().setContents(this.inventory.getContents());
                 player.getInventory().setArmorContents(this.inventory.getArmorContents());
@@ -76,8 +92,8 @@ public class User implements Serializable {
             }
             if (this.gameMode != null) player.setGameMode(this.gameMode);
             if (this.location != null && !player.getLocation().equals(this.location)) player.teleport(this.location);
-            player.setAllowFlight(this.settings[2]);
-            player.setFlying(this.settings[3]);
+            player.setAllowFlight(this.allowFlight);
+            player.setFlying(this.flying);
         } catch (Exception e) {
             player.kick(Component.text(TextUtil.color("&cAn error occurred while loading the user.")), PlayerKickEvent.Cause.PLUGIN);
             TextUtil.severe("&cAn error occurred while loading user (" + this.name + ")");
@@ -88,14 +104,15 @@ public class User implements Serializable {
     public void updateData(Player player) {
         this.gameMode = player.getGameMode();
         this.location = player.getLocation();
-        this.settings[2] = player.getAllowFlight();
-        this.settings[3] = player.isFlying();
+        this.allowFlight = player.getAllowFlight();
+        this.flying = player.isFlying();
         this.updateInventory(player, false);
         this.setUpdate(true);
     }
 
     public void updateInventory(Player player, boolean update) {
-        if (this.inventory == null) this.inventory = new UserInventory(player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getEnderChest().getContents());
+        if (this.inventory == null)
+            this.inventory = new UserInventory(player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getEnderChest().getContents());
         else {
             this.inventory.setContents(player.getInventory().getContents());
             this.inventory.setArmorContents(player.getInventory().getArmorContents());
@@ -122,6 +139,10 @@ public class User implements Serializable {
         return this.location;
     }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
         this.setUpdate(true);
@@ -141,7 +162,25 @@ public class User implements Serializable {
         this.setUpdate(true);
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public double getStat(StatType statType) {
+        if (stats.get(statType) == null) return 0.0;
+        return stats.get(statType);
+    }
+
+    public int getMaxStat(StatType type) {
+        Item item = SkyblockPlugin.getInstance().getItemManager().getPlayerItem(getPlayer());
+        if (item == null) return 0;
+
+        return item.getStats().get(type);
+    }
+
+    public int calculateDamage() {
+        int damage = 5;
+
+        Item item = SkyblockPlugin.getInstance().getItemManager().getPlayerItem(getPlayer());
+        if (item == null) return damage;
+
+        damage += item.getStats().get(StatType.DAMAGE) * (1 + item.getStats().get(StatType.STRENGTH) / 100);
+        return damage;
     }
 }

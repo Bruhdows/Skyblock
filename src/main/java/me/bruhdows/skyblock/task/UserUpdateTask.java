@@ -1,15 +1,13 @@
 package me.bruhdows.skyblock.task;
 
+import lombok.RequiredArgsConstructor;
 import me.bruhdows.skyblock.SkyblockPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+@RequiredArgsConstructor
 public class UserUpdateTask extends BukkitRunnable {
 
     private final SkyblockPlugin skyblock;
-
-    public UserUpdateTask(SkyblockPlugin skyblock) {
-        this.skyblock = skyblock;
-    }
 
     @Override
     public void run() {

@@ -1,26 +1,23 @@
 package me.bruhdows.skyblock.util;
 
-import me.bruhdows.skyblock.SkyblockPlugin;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import me.bruhdows.arena.BoxhuntArena;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
 public class TextUtil {
-
-    public static Component miniMessage(String message) {
-        LegacyComponentSerializer serializer = LegacyComponentSerializer.builder().build();
-        return serializer.deserialize(color(message));
-    }
 
     public static String color(String message) {
         Pattern pattern = Pattern.compile("&(#[a-fA-F0-9]{6})");
@@ -36,7 +33,7 @@ public class TextUtil {
     }
 
     public static void sendMessage(Player player, String message) {
-        player.sendMessage(miniMessage(message));
+        player.sendMessage(color(message));
     }
 
     public static void sendMessage(CommandSender sender, String message) {
@@ -60,7 +57,7 @@ public class TextUtil {
     }
 
     public static void sendActionbar(Player player, String message) {
-        player.sendActionBar(miniMessage(message));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(color(message)));
     }
 
     public static void sendTitle(Player player, String title, String subtitle) {
@@ -108,7 +105,7 @@ public class TextUtil {
     }
 
     public static void log(Level level, String message) {
-        SkyblockPlugin.getInstance().getLogger().log(level, color(message));
+        BoxhuntArena.getInstance().getLogger().log(level, color(message));
     }
 
     public static void log(Level level, String prefix, String message) {

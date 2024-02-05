@@ -1,7 +1,7 @@
 package me.bruhdows.skyblock.listener;
 
 import me.bruhdows.skyblock.SkyblockPlugin;
-import me.bruhdows.skyblock.module.user.User;
+import me.bruhdows.skyblock.core.user.User;
 import me.bruhdows.skyblock.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

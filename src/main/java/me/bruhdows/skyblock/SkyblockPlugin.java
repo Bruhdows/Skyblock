@@ -10,34 +10,50 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import lombok.Getter;
-import me.bruhdows.skyblock.api.gui.InventoryManager;
-import me.bruhdows.skyblock.command.ItemCommand;
-import me.bruhdows.skyblock.command.MobCommand;
-import me.bruhdows.skyblock.handler.InvalidUsageHandler;
-import me.bruhdows.skyblock.handler.MissingPermissionsHandler;
+import me.bruhdows.skyblock.command.admin.GameModeCommand;
+import me.bruhdows.skyblock.command.admin.ItemCommand;
+import me.bruhdows.skyblock.command.admin.MobCommand;
+import me.bruhdows.skyblock.command.argument.GameModeArgument;
+import me.bruhdows.skyblock.command.argument.ItemArguemnt;
+import me.bruhdows.skyblock.command.argument.MobArgument;
+import me.bruhdows.skyblock.command.handler.InvalidUsageHandler;
+import me.bruhdows.skyblock.command.handler.MissingPermissionsHandler;
+import me.bruhdows.skyblock.core.ability.AbilityManager;
+import me.bruhdows.skyblock.core.ability.impl.Explosion;
+import me.bruhdows.skyblock.core.ability.impl.LeftClickAbility;
+import me.bruhdows.skyblock.core.ability.impl.LeftShiftClickAbility;
+import me.bruhdows.skyblock.core.ability.impl.RightClickAbility;
+import me.bruhdows.skyblock.core.item.Item;
+import me.bruhdows.skyblock.core.item.ItemManager;
+import me.bruhdows.skyblock.core.item.impl.Dynamite;
+import me.bruhdows.skyblock.core.item.impl.EnchantedDiamond;
+import me.bruhdows.skyblock.core.item.impl.Enrager;
+import me.bruhdows.skyblock.core.mob.Mob;
+import me.bruhdows.skyblock.core.mob.MobManager;
+import me.bruhdows.skyblock.core.mob.impl.Dummy;
+import me.bruhdows.skyblock.core.user.User;
+import me.bruhdows.skyblock.core.user.UserManager;
+import me.bruhdows.skyblock.gui.api.gui.InventoryManager;
 import me.bruhdows.skyblock.listener.DamageListener;
 import me.bruhdows.skyblock.listener.ItemListener;
 import me.bruhdows.skyblock.listener.JoinQuitListener;
-import me.bruhdows.skyblock.manager.*;
-import me.bruhdows.skyblock.module.ability.impl.LeftClickAbility;
-import me.bruhdows.skyblock.module.ability.impl.LeftShiftClickAbility;
-import me.bruhdows.skyblock.module.ability.impl.RightClickAbility;
-import me.bruhdows.skyblock.module.item.impl.EnchantedDiamond;
-import me.bruhdows.skyblock.module.item.impl.Enrager;
-import me.bruhdows.skyblock.module.mob.impl.Dummy;
-import me.bruhdows.skyblock.module.user.User;
+import me.bruhdows.skyblock.listener.PlayerChatListener;
+import me.bruhdows.skyblock.storage.config.Chat;
 import me.bruhdows.skyblock.storage.config.Configuration;
 import me.bruhdows.skyblock.storage.config.Data;
 import me.bruhdows.skyblock.storage.config.Messages;
 import me.bruhdows.skyblock.storage.database.JedisAPI;
 import me.bruhdows.skyblock.storage.database.JedisListener;
+import me.bruhdows.skyblock.storage.database.JedisManager;
 import me.bruhdows.skyblock.storage.database.MongoDB;
-import me.bruhdows.skyblock.task.StatsTask;
 import me.bruhdows.skyblock.task.UserUpdateTask;
 import me.bruhdows.skyblock.util.TextUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -60,12 +76,14 @@ public final class SkyblockPlugin extends JavaPlugin {
     private Configuration configuration;
     private Messages messages;
     private Data data;
+    private Chat chat;
 
     private JedisAPI jedisAPI;
     private MongoDB mongoDB;
 
-    private ParticleNativeAPI particleAPI;
+    private LuckPerms luckPerms;
     private MiniMessage miniMessage;
+    private ParticleNativeAPI particleAPI;
 
     @Override
     public void onEnable() {
@@ -115,6 +133,13 @@ public final class SkyblockPlugin extends JavaPlugin {
             it.saveDefaults();
             it.load(true);
         });
+        chat = ConfigManager.create(Chat.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer());
+            it.withBindFile(new File(getDataFolder(), "chat.yml"));
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
     }
 
     private void initDatabases() {
@@ -129,6 +154,9 @@ public final class SkyblockPlugin extends JavaPlugin {
 
     private void registerManagers() {
         miniMessage = MiniMessage.miniMessage();
+
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (provider != null) luckPerms = provider.getProvider();
 
         try {
             particleAPI = ParticleNativeCore.loadAPI(this);
@@ -148,6 +176,7 @@ public final class SkyblockPlugin extends JavaPlugin {
         itemManager = new ItemManager();
         itemManager.registerItem(new Enrager());
         itemManager.registerItem(new EnchantedDiamond());
+        itemManager.registerItem(new Dynamite());
 
         mobManager = new MobManager();
         mobManager.registerMob(new Dummy());
@@ -156,13 +185,15 @@ public final class SkyblockPlugin extends JavaPlugin {
         abilityManager.registerAbility(new LeftClickAbility());
         abilityManager.registerAbility(new LeftShiftClickAbility());
         abilityManager.registerAbility(new RightClickAbility());
+        abilityManager.registerAbility(new Explosion());
     }
 
     private void registerListeners() {
         Set.of(
                 new ItemListener(this),
                 new JoinQuitListener(this),
-                new DamageListener(this)
+                new DamageListener(this),
+                new PlayerChatListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
@@ -170,9 +201,13 @@ public final class SkyblockPlugin extends JavaPlugin {
         liteCommands = LiteCommandsBukkit.builder()
                 .settings(settings -> settings.fallbackPrefix("skyblock").nativePermissions(true))
                 .commands(
-                    new ItemCommand(),
-                    new MobCommand()
+                        new GameModeCommand(),
+                        new ItemCommand(),
+                        new MobCommand()
                 )
+                .argument(GameMode.class, new GameModeArgument())
+                .argument(Item.class, new ItemArguemnt())
+                .argument(Mob.class, new MobArgument())
                 .message(LiteBukkitMessages.PLAYER_ONLY, "&cOnly player can execute this command!")
                 .message(LiteBukkitMessages.PLAYER_NOT_FOUND, input -> "&cPlayer &7" + input + " &cnot found!")
                 .missingPermission(new MissingPermissionsHandler())
@@ -181,9 +216,6 @@ public final class SkyblockPlugin extends JavaPlugin {
     }
 
     private void startTasks() {
-        if (mongoDB != null || jedisAPI != null) {
-            new UserUpdateTask(this).runTaskTimer(this, 0L, 20L);
-        }
-        new StatsTask(this).runTaskTimer(this, 0L, 20L);
+        if (mongoDB != null || jedisAPI != null) new UserUpdateTask(this).runTaskTimer(this, 0L, 6000L);
     }
 }

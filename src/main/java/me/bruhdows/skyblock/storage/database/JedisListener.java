@@ -10,8 +10,7 @@
 package me.bruhdows.skyblock.storage.database;
 
 import me.bruhdows.skyblock.SkyblockPlugin;
-import me.bruhdows.skyblock.manager.JedisManager;
-import me.bruhdows.skyblock.module.user.User;
+import me.bruhdows.skyblock.core.user.User;
 import me.bruhdows.skyblock.util.SerializationUtil;
 import me.bruhdows.skyblock.util.TextUtil;
 import org.bukkit.Bukkit;
